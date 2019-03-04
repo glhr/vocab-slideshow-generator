@@ -4,7 +4,7 @@ var deck;
 var text = "";
 var title= "";
 var words = [];
-var slideshowLink = "http://default.com";
+var slideshowLink = "#";
 
 function doGet(e) {
   return HtmlService.createHtmlOutputFromFile('index').setTitle("Automatic Vocabulary Slideshow Generator");
@@ -23,9 +23,9 @@ function processForm(formObject) {
     getWords();
     
     var week = 'week 8';
-    deck = SlidesApp.create(NAME + ' - ' + title);
+    deck = SlidesApp.create(NAME + ' - ' + slideTitle);
     var [title, subtitle] = deck.getSlides()[0].getPageElements();
-    title.asShape().getText().setText(slideTitle.toString());
+    title.asShape().getText().setText(slideTitle);
     subtitle.asShape().getText().setText(':)');
     words.forEach(addImageSlide);
     
@@ -40,14 +40,12 @@ function getWords() {
 }
 
 /**
- * Creates a single slide using the image from the given link;
+ * Creates a single slide for a given word;
  * used directly by foreach(), hence the parameters are fixed.
- * @param {string} imageUrl A String object representing an image URL
+ * @param {string} word A String object representing a word
  * @param {number} index The index into the array; unused (req'd by forEach)
  */
 function addImageSlide(word, index) {
-  
-    
   
     var slide = deck.appendSlide(SlidesApp.PredefinedLayout.SECTION_HEADER);
   
@@ -78,9 +76,6 @@ function addImageSlide(word, index) {
     image.setLeft(newX).setTop(100);
 }
 
-/**
- * Adds images to a slides presentation.
- */
 function main() {
   
 }

@@ -6,8 +6,8 @@
     <title>Automatic Vocabulary Slideshow Generator</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
-
   </head>
+  
   <body>
   <form class="main" id="form" onsubmit="event.preventDefault(); handleFormSubmit(this);" style="max-width: 480px;margin: 40px auto;">
   <div id="forminner">
@@ -79,6 +79,7 @@
       
     function showSuccess(e) {
         if (e[0] === "OK") { 
+          $('#progress').hide();
           $('#success').show();
           addSlideshowURL(e[1]);
         }
