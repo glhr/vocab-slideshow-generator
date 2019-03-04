@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Automatic Vocabulary Slideshow Generator</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
+
+  </head>
+  <body>
+  <form class="main" id="form" onsubmit="event.preventDefault(); handleFormSubmit(this);" style="max-width: 480px;margin: 40px auto;">
+  <div id="forminner">
+  
+    <div class="row">
+          <div class="col s12">
+            <h5 class="center-align teal-text">Generate a Google Presentation from a vocabulary list</h5>
+          </div>
+    </div>
+    <div class="row">
+       <div class="input-field col s12">
+         <input id="titlearea" type="text" name="title">
+          <label for="titlearea">Presentation title</label>
+        </div>
+    </div>
+    <div class="row">
+       <div class="input-field col s12">
+         <textarea id="wordarea" class="materialize-textarea" name="words"></textarea>
+          <label for="wordarea">Insert one word/phrase per line</label>
+        </div>
+    </div>
+    <div class="row">
+       <div class="input-field col s12">
+         <button class="waves-effect waves-light btn submit-btn" type="submit" name="submit">Create slideshow</button>
+       </div>
+    </div>
+    
+    <div class="row">
+          <div class="input-field col s12" id = "progress">
+          </div>
+        </div>
+        
+    </div>
+    
+    <div id="success" style="display:none">
+        <h5 class="left-align teal-text">Done</h5>
+        <p>Your presentation has been successfully generated.</p>
+    </div>
+      
+   </form>
+   
+      
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+
+   
+   <script>
+    // Prevent forms from submitting.
+      function preventFormSubmit() {
+        var forms = document.querySelectorAll('form');
+        for (var i = 0; i < forms.length; i++) {
+          forms[i].addEventListener('submit', function(event) {
+            event.preventDefault();
+          });
+        }
+      }
+      window.addEventListener('load', preventFormSubmit);
+    
+    function handleFormSubmit(formObject) {
+        showMessage("Working...");
+        google.script.run
+        .withSuccessHandler(showSuccess)
+        .processForm(formObject);
+      }
+      
+    function addSlideshowURL(id) {
+          $('#success').append("<a href='https://docs.google.com/presentation/d/" + id + "' target='_blank'>Link to the presentation</a>");
+    }
+      
+    function showSuccess(e) {
+        if (e[0] === "OK") { 
+          $('#success').show();
+          addSlideshowURL(e[1]);
+        }
+        else{
+           showError(e);
+        }
+      }
+      
+    function showError(e) {
+        $('#progress').addClass('red-text').html(e);
+      }
+
+      function showMessage(e) {
+        $('#progress').removeClass('red-text').html(e);
+      }
+
+    </script>
+
+  </body>
+</html>
+
+
