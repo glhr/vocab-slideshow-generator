@@ -45,6 +45,7 @@
     <div id="success" style="display:none">
         <h5 class="left-align teal-text">Done</h5>
         <p>Your presentation has been successfully generated.</p>
+        <a href="#" id="presentationLink" target='_blank'>Link to the presentation</a>
     </div>
       
    </form>
@@ -67,14 +68,18 @@
       window.addEventListener('load', preventFormSubmit);
     
     function handleFormSubmit(formObject) {
+        $('#success').hide();
         showMessage("Working...");
+        $('#progress').show();
         google.script.run
         .withSuccessHandler(showSuccess)
         .processForm(formObject);
       }
       
     function addSlideshowURL(id) {
-          $('#success').append("<a href='https://docs.google.com/presentation/d/" + id + "' target='_blank'>Link to the presentation</a>");
+          var link = 'https://docs.google.com/presentation/d/' + id;
+//          $('#success').append("<a href='https://docs.google.com/presentation/d/" + id + "' target='_blank'>Link to the presentation</a>");
+          $('#presentationLink').attr("href", link)
     }
       
     function showSuccess(e) {
