@@ -29,14 +29,36 @@ function processForm(formObject) {
     subtitle.asShape().getText().setText(':)');
     words.forEach(addImageSlide);
     
-    return ["OK",deck.getId()];
+    var fileId = deck.getId();
+    
+    convertFileToPptx(fileId, NAME + ' - ' + slideTitle);
+    
+    return ["OK",fileId];
   } catch (f) {
     return f.toString();
   }
 }
 
+function removeNumbering(phrase) {
+  var reg = /[0-9]*(\.|\))\s*/g;
+  formatted = phrase.replace(reg, "");
+  return formatted;
+}
+
 function getWords() { 
+    text = removeNumbering(text);
     words = text.split(/\r?\n/);
+}
+
+function convertFileToPptx(id, title) {
+
+  var outputFileName = title+".pptx";
+
+  var url = 'https://docs.google.com/presentation/d/'+id+'/export/pptx?access_token=' + ScriptApp.getOAuthToken();
+  var rootFolder = DriveApp.getRootFolder();
+  var response = UrlFetchApp.fetch(url);
+  var blobPptx = response.getBlob();
+  var result = rootFolder.createFile(blobPptx.setName(outputFileName));
 }
 
 /**
@@ -58,6 +80,7 @@ function addImageSlide(word, index) {
     title.asShape().setTop(20);
     title.asShape().getText().setText(word);
     title.asShape().getText().getTextStyle().setFontSize(60);
+      title.asShape().getText().getTextStyle().setBold(true);
   
     var imgWidth = image.getWidth();
     var imgHeight = image.getHeight();
@@ -65,7 +88,7 @@ function addImageSlide(word, index) {
     var pageWidth = deck.getPageWidth();
     var pageHeight = deck.getPageHeight();
   
-    var newHeight = pageHeight-150;
+    var newHeight = pageHeight-200;
     var newWidth = imgRatio * newHeight;
     image.setHeight(newHeight);
     image.setWidth(newWidth);
@@ -73,7 +96,7 @@ function addImageSlide(word, index) {
     var newX = pageWidth/2. - newWidth/2.;
     var newY = pageHeight/2. - newHeight/2.;
   
-    image.setLeft(newX).setTop(100);
+    image.setLeft(newX).setTop(150);
 }
 
 function main() {
