@@ -2,8 +2,10 @@ var NAME = 'Spelling list';
 
 var deck;
 var text = "";
+var searchtext = "";
 var title= "";
 var words = [];
+var searchinfo = [];
 var slideshowLink = "#";
 
 function doGet(e) {
@@ -17,12 +19,11 @@ function getPresentationLink() {
 function processForm(formObject) {
   
   try {
-    text = formObject.words;
     slideTitle = formObject.title;
+
+    words = textToArray(removeNumbering(formObject.words));
+    searchinfo = textToArray(formObject.searchinfo);
     
-    getWords();
-    
-    var week = 'week 8';
     deck = SlidesApp.create(NAME + ' - ' + slideTitle);
     var [title, subtitle] = deck.getSlides()[0].getPageElements();
     title.asShape().getText().setText(slideTitle);
@@ -45,9 +46,8 @@ function removeNumbering(phrase) {
   return formatted;
 }
 
-function getWords() { 
-    text = removeNumbering(text);
-    words = text.split(/\r?\n/);
+function textToArray(words) { 
+    return words.split(/\r?\n/);
 }
 
 function convertFileToPptx(id, title) {
@@ -65,13 +65,13 @@ function convertFileToPptx(id, title) {
  * Creates a single slide for a given word;
  * used directly by foreach(), hence the parameters are fixed.
  * @param {string} word A String object representing a word
- * @param {number} index The index into the array; unused (req'd by forEach)
+ * @param {number} index The index into the array
  */
 function addImageSlide(word, index) {
   
     var slide = deck.appendSlide(SlidesApp.PredefinedLayout.SECTION_HEADER);
   
-    var imageUrl = getImageURL(word);
+    var imageUrl = getImageURL(searchinfo[index]);
     var image = slide.insertImage(imageUrl);
   
     var [title, body] = slide.getPageElements();

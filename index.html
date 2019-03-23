@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Automatic Vocabulary Slideshow Generator</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   </head>
   
   <body>
-  <form class="main" id="form" onsubmit="event.preventDefault(); handleFormSubmit(this);" style="max-width: 480px;margin: 40px auto;">
+  <form class="main" id="form" onsubmit="event.preventDefault(); handleFormSubmit(this);" style="max-width: 580px;margin: 40px auto;">
   <div id="forminner">
   
     <div class="row">
@@ -24,9 +24,18 @@
         </div>
     </div>
     <div class="row">
-       <div class="input-field col s12">
-         <textarea id="wordarea" class="materialize-textarea" name="words"></textarea>
-          <label for="wordarea">Insert one word/phrase per line</label>
+       <div class="input-field col s5">
+         <textarea id="wordarea" class="materialize-textarea" name="words" style="height: 6rem;"></textarea>
+          <label for="wordarea" id="wordaralabel">Insert one word/phrase per line</label>
+        </div>
+        <div class="input-field col s2">
+         <p class="center-align">
+            <a class="waves-effect waves-light btn-small" onclick="updateSearchInfo()">&#8594;</a>
+         </p>
+        </div>
+       <div class="input-field col s5">
+         <textarea id="searchinfoarea" class="materialize-textarea" name="searchinfo" style="height: 6rem;"></textarea>
+          <label for="searchinfoarea" id="searchinfoarealabel">Edit the search terms for each word (optional)</label>
         </div>
     </div>
     <div class="row">
@@ -52,7 +61,7 @@
    
       
    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
    
    <script>
@@ -100,6 +109,19 @@
       function showMessage(e) {
         $('#progress').removeClass('red-text').html(e);
       }
+      
+    function removeNumbering(phrase) {
+    var reg = /[0-9]*(\.|\))\s*/g;
+    formatted = phrase.replace(reg, "");
+    return formatted;
+    }
+      
+    function updateSearchInfo() {
+       
+       $('#searchinfoarealabel').addClass('active');
+       $('#searchinfoarea').val(removeNumbering($('#wordarea').val()));
+       M.textareaAutoResize($('#searchinfoarea'));
+    }
 
     </script>
 
